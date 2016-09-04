@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "forever start app.js",
     "start:dev": "nodemon app.js"
   },
   "repository": {
@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/pavel06081991/SPWorldBackend#readme",
   "dependencies": {
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
     "express": "^4.14.0",
     "express-validator": "^2.20.8",
     "jsonwebtoken": "^7.1.9",
@@ -34,13 +36,16 @@
     "usersRoutes": "./routes/users",
     "usersUtils": "./utils/users",
     "routesUtils": "./utils/routes",
-    "dbUtils": "./utils/db",
-    "usersModels": "./db_models/users"
+    "customSanitizers": "./utils/sanitizers",
+    "customValidators": "./utils/validators",
+    "dbConnection": "./utils/db_connection",
+    "usersModel": "./db_models/users"
   },
   "_sp-load": {
     "renaming": {
       "lodash": "_",
-      "jsonwebtoken": "jwt"
+      "jsonwebtoken": "jwt",
+      "bcryptjs": "bcrypt"
     }
   }
 }

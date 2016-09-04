@@ -1,11 +1,13 @@
-const $ = require('sp-load');
+function validateRoute(req, res) {
+  let validationPromise = req.asyncValidationErrors();
 
-function validateRoute(req, res, successCallback) {
-  req.asyncValidationErrors().then(successCallback, function(errors) {
+  validationPromise.catch(function(errors) {
     res.json(errors);
   });
+
+  return validationPromise;
 }
 
 module.exports = {
-  validateRoute: validateRoute
+  validateRoute
 };

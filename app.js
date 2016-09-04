@@ -1,30 +1,44 @@
-const $ = require('sp-load'),
-  app = $.express(),
-  port = $.config.defultPort;
+const {
+    express,
+    config,
+    bodyParser,
+    expressValidator,
+    rootRoutes,
+    customSanitizers,
+    customValidators,
+    compression
+  } = require('sp-load'),
+  app = express(),
+  port = config.defultPort;
 
-app.use($.express.static(__dirname + '/public'));
+app.use(compression());
 
-app.use($.bodyParser.urlencoded({ extended: false }));
-app.use($.bodyParser.json());
+app.use(express.static(__dirname + '/public'));
 
-app.use($.expressValidator());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
-app.use($.morgan('dev'));
+app.use(expressValidator({
+  customSanitizers: customSanitizers,
+  customValidators: customValidators
+}));
 
-app.use($.rootRoutes);
+app.use(rootRoutes);
 
-/*app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+app.use(function (req, res, next) {
+  const err = new Error('Not Found');
+
   err.status = 404;
+
   next(err);
 });
 
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
+
+  res.json({
+    message: err.message || 'Something failed!'
   });
-});*/
+});
 
 app.listen(port);

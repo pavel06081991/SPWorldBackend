@@ -1,25 +1,27 @@
-const $ = require('sp-load');
+const {
+  dbConnection,
+  sequelize
+} = require('sp-load');
 
-const user = $.dbUtils.sequelize.define('users', {
+const usersModel = dbConnection.define('users', {
   id: {
-    type: $.sequelize.INTEGER,
+    type: sequelize.INTEGER,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true
   },
   email: {
-    type: $.sequelize.STRING
+    type: sequelize.STRING
   },
   login: {
-    type: $.sequelize.STRING
+    type: sequelize.STRING,
+    unique: true
   },
   password: {
-    type: $.sequelize.STRING
+    type: sequelize.STRING
   }
 }, {
-  freezeTableName: true // Model tableName will be the same as the model name
+  freezeTableName: true
 });
 
-module.exports = {
-  user: user
-};
+module.exports = usersModel;

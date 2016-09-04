@@ -1,1 +1,70 @@
-- добавить шифрование пароля пользователей при работе с базой данных(заюзать bcrypt)
+добавить такую же проверку
+app.use(function(req, res, next) {
+
+  // check header or url parameters or post parameters for token
+  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  // decode token
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+      if (err) {
+        return res.status(401).json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        req.user = user;
+        next();
+      }
+    });
+  } else {
+    next();
+  }
+});
+
+router.get('/users/?', function(req, res) {
+
+  if (!req.user || !req.user.admin)
+    return res.status(401).json({
+      error: 'You must be admin to access this route.'
+});
+это все здесь взято https://github.com/rajaraodv/react-redux-blog/blob/master/app.js
+
+
+compression middleware
+глянуть, что user не входит в урл апишки
+заменить checkBody на asserts
+
+ошибка логина возвращает 200-ый код, а нужно добавить код ошибки
+
+возможно местами поменять чистку полей и валидации, то есть чистку добавить в момент, когда прошла валидация, а может и не нужно, подумай в общем
+
+error handling почитать и заюзать, пока все временное пилил
+
+заюзать синтаксим валидации с помощью описания валидаций по схемам(объектом). Плюс убрать дублирование в разных роутов одних и тех же валидаций, вынести в ф-цию их формирование(чтобы не дублировать сообщения и т.п.)
+
+спросить в ишьюсах, как передавать параметры валидации из ф-ции asyncValidationErrors, в моем случае мне нужно получить юзера, чтобы не было дважды запроса в базу
+
+этот кусок кода в валидациях кастомных неправильный
+        .catch(function (error) {
+          if (error) {
+            reject(error);
+          }
+        });
+т.к. если с базой что-то, то пользователю вернется сообщение, что пароль или логин не верный, а проблема на самом деле в базе, которая. например, лежит
+
+
+
+- добавить шифрование пароля пользователей при работе с базой данных(заюзать bcryptjs)
+- добавить проверку на то, что пользователь еще не существует в базе
+- добавить в ридми список глобальных модулей, которые нужно установить, чтобы работало приложение
+{
+    "name": "Meh",
+    "description": "Some Description",
+    "scripts": {
+        "preinstall": "npm list someDependency@1.4.5 -g || npm install someDependency@1.4.5 -g"
+    }
+}
+(https://github.com/npm/npm/issues/2949)
+
+http://stackoverflow.com/questions/14657170/installing-global-npm-dependencies-via-package-json
+
+
+- https://www.sitepoint.com/solve-global-npm-module-dependency-problem/

@@ -1,6 +1,9 @@
-const $ = require('sp-load'),
-  app = $.express.Router();
+const {
+    express,
+    usersRoutes
+  } = require('sp-load'),
+  app = express.Router();
 
-app.use('/api', $.usersRoutes);
+app.use(usersRoutes);
 
 module.exports = app;
